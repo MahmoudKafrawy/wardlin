@@ -3,7 +3,7 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { collection } from "firebase/firestore";
 import { motion } from "framer-motion";
 import moment from "moment";
-import { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useIP } from "../../../hooks/useIP";
 import { db } from "../../../lib/firestore";
@@ -44,7 +44,7 @@ export function ChatBox({ name }: { name: string }) {
     <div className="w-full px-4">
       <ScrollArea.Root className="h-[calc(100vh-250px)] my-4">
         {/* //TODO fix ref type for this package */}
-        <ScrollArea.Viewport className="w-full h-full" ref={chatBoxRef}>
+        <ScrollArea.Viewport className="w-full h-full" ref={chatBoxRef as RefObject<HTMLDivElement> | undefined}>
           <div className="flex flex-col ">
             {col?.docs &&
               col.docs
