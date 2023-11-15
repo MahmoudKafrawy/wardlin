@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Bitter:wght@100;200;300;400;500;600&family=Readex+Pro:wght@200&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f4f5fa;
+  font-family: Bitter;
+}
