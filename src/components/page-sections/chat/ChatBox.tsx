@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { collection } from "firebase/firestore";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import moment from "moment";
 import { RefObject, useEffect, useRef } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -45,26 +45,28 @@ export function ChatBox({ name }: { name: string }) {
       <ScrollArea.Root className="h-[calc(100vh-250px)] my-4">
         {/* //TODO fix ref type for this package */}
         <ScrollArea.Viewport className="w-full h-full" ref={chatBoxRef as RefObject<HTMLDivElement> | undefined}>
-          <div className="flex flex-col ">
-            {col?.docs &&
-              col.docs
-                .sort((a, b) => a.data().created.seconds - b.data().created.seconds)
-                .map((v, index) => (
-                  <motion.div
-                    initial={{ opacity: 0, x: "-10px" }}
-                    animate={{ opacity: 1, x: "0" }}
-                    transition={{ duration: 0.3 }}
-                    key={index}
-                    className={`my-2 p-2 rounded-md w-fit ${v.data().ip == ip && "self-end"}`}
-                    style={{ backgroundColor: ipHexEncode(ip) }}
-                  >
-                    <p>{v.data().message}</p>
-                    <div className="flex gap-2">
-                      <p className="text-xs text-gray-500">{v.data().name}</p>
-                      <p className="text-xs text-gray-500">{moment.unix(v.data()?.created?.seconds).fromNow()}</p>
-                    </div>
-                  </motion.div>
-                ))}
+          <div className="flex flex-col">
+            <AnimatePresence>
+              {col?.docs &&
+                col.docs
+                  .sort((a, b) => a.data().created.seconds - b.data().created.seconds)
+                  .map((v, index) => (
+                    <motion.div
+                      initial={{ opacity: 0, x: "-10px" }}
+                      animate={{ opacity: 1, x: "0" }}
+                      transition={{ duration: 0.3 }}
+                      key={index}
+                      className={`my-2 p-2 rounded-md w-fit ${v.data().ip == ip && "self-end"}`}
+                      style={{ backgroundColor: ipHexEncode(ip) }}
+                    >
+                      <p>{v.data().message}</p>
+                      <div className="flex gap-2">
+                        <p className="text-xs text-gray-500">{v.data().name}</p>
+                        <p className="text-xs text-gray-500">{moment.unix(v.data()?.created?.seconds).fromNow()}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+            </AnimatePresence>
           </div>
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar className="bg-gray-200 w-2" orientation="vertical">
